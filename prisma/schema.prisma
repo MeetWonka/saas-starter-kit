@@ -8,6 +8,7 @@ datasource db {
 }
 
 enum Role {
+  SUPER_ADMIN
   ADMIN
   OWNER
   MEMBER
@@ -62,6 +63,7 @@ model User {
   updatedAt              DateTime  @default(now())
   invalid_login_attempts Int       @default(0)
   lockedAt               DateTime?
+  freeTrialConsumed      Boolean   @default(false)
 
   teamMembers TeamMember[]
   accounts    Account[]
@@ -82,6 +84,7 @@ model Team {
   members         TeamMember[]
   invitations     Invitation[]
   apiKeys         ApiKey[]
+  numbers         Number[] // <-- Add this line
 
   @@index([billingId])
 }
@@ -180,8 +183,40 @@ model Price {
   metadata      Json
   type          String
   created       DateTime
+  monthlyCredit Float   @default(00.00)
 
   service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+}
+
+model Credit {
+  id           String   @id @default(cuid())  
+  teamId       String   @unique
+  amount       Float  
+  createdAt    DateTime @default(now()) 
+  updatedAt    DateTime @updatedAt    
+}
+
+model Number {
+  id          String  @id @default(cuid())
+  phoneNumber String
+  displayName String
+  language    String
+  emails      Email[] @relation("NumberEmails")
+  team        Team    @relation(fields: [teamId], references: [id])
+  teamId      String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Email {
+  id       String @id @default(cuid())
+  email    String
+  number   Number @relation("NumberEmails", fields: [numberId], references: [id])
+  numberId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model jackson_store {

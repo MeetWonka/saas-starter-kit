@@ -25,7 +25,10 @@ export const email = z
   .max(
     maxLengthPolicies.email,
     `Email should have at most ${maxLengthPolicies.email} characters`
-  );
+  )
+  .regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, {
+    message: 'Enter a valid email address',
+  });
 
 export const teamName = z
   .string({
@@ -262,3 +265,34 @@ export const memberId = z
     maxLengthPolicies.memberId,
     `Member id should be at most ${maxLengthPolicies.memberId} characters`
   );
+
+  export const phoneNumber = z
+  .string({
+    required_error: 'Phone number is required',
+    invalid_type_error: 'Phone number must be a string',
+  })
+  .min(1, 'Phone number is required') // Minimum length of 1 to ensure it's not empty
+  .max(
+    maxLengthPolicies.phoneNumber,
+    `Phone number should have at most ${maxLengthPolicies.phoneNumber} characters`
+  )
+  // .regex(
+  //   /^[+]*[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/, 
+  //   'Invalid phone number format'
+  // );
+
+  export const displayName = z
+  .string({
+    required_error: 'Display name is required',
+    invalid_type_error: 'Display name must be a string',
+  })
+  .min(1, 'Display name is required')
+  .max(
+    maxLengthPolicies.displayName,
+    `Display name should have at most ${maxLengthPolicies.displayName} characters`
+  );
+
+export const emails = z.array(email).nonempty();
+
+
+

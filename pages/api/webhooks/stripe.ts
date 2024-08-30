@@ -1,6 +1,7 @@
 import Stripe from 'stripe';
 import { stripe } from '@/lib/stripe';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { updateCredit } from 'models/credit';
 import env from '@/lib/env';
 import type { Readable } from 'node:stream';
 import {
@@ -10,6 +11,7 @@ import {
   updateStripeSubscription,
 } from 'models/subscription';
 import { getByCustomerId } from 'models/team';
+import { getMonthlyCreditByPriceId } from 'models/price';
 
 export const config = {
   api: {
@@ -30,6 +32,7 @@ const relevantEvents: Stripe.Event.Type[] = [
   'customer.subscription.created',
   'customer.subscription.updated',
   'customer.subscription.deleted',
+  'invoice.payment_succeeded'
 ];
 
 export default async function POST(req: NextApiRequest, res: NextApiResponse) {
@@ -49,6 +52,8 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
   }
 
   if (relevantEvents.includes(event.type)) {
+    console.error('Received event:', event.id);
+    console.error('Received event type:', event.type);
     try {
       switch (event.type) {
         case 'customer.subscription.created':
@@ -62,6 +67,8 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
             (event.data.object as Stripe.Subscription).id
           );
           break;
+        case 'invoice.payment_succeeded':
+          await handlePaymentSucceeded(event);
         default:
           throw new Error('Unhandled relevant event!');
       }
@@ -127,3 +134,38 @@ async function handleSubscriptionCreated(event: Stripe.Event) {
     priceId: items.data.length > 0 ? items.data[0].plan?.id : '',
   });
 }
+
+
+export const handlePaymentSucceeded = async (event: any) => {
+  // Extract necessary information from the event
+  const customer_id = event.data.object.customer;
+  // get price_id from the event
+  const price_id = event.data.object.lines.data[0].plan.id;
+
+
+  if (!price_id) {
+    console.error('No monthly credits found in the event metadata');
+    return;
+  }
+  const monthlyCredits = await getMonthlyCreditByPriceId(price_id);
+  console.error('monthlyCredits', monthlyCredits);
+
+  // Step 2: Find the team by customer ID
+  const team = await getByCustomerId(customer_id);
+  console.error('team', team);
+  if (!team) {
+    console.error(`No team found with customer ID: ${customer_id}`);
+    return;
+  }
+
+  if(!monthlyCredits) {
+    console.error('No monthly credits found in the event metadata');
+    return;
+  }
+
+  await updateCredit(team.id, {
+    amount: monthlyCredits,
+  });
+
+  console.error(`Updated credits for team ${team.id} by ${monthlyCredits}`);
+};

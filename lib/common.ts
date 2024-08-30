@@ -1,3 +1,5 @@
+import { phoneNumber } from "./zod/primitives";
+
 const domainRegex =
   /(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/;
 
@@ -45,4 +47,6 @@ export const maxLengthPolicies = {
   expiredToken: 64,
   invitationId: 64,
   sendViaEmail: 10,
+  phoneNumber: 20,
+  displayName : 200
 };

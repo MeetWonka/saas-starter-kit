@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { priceId } from '@/lib/zod/primitives';
 import { Service } from '@prisma/client';
 
 export const getAllPrices = async () => {
@@ -18,3 +19,14 @@ export const getServiceByPriceId = async (
   });
   return data?.service;
 };
+
+export const getMonthlyCreditByPriceId = async (
+  priceId: string
+): Promise<number | undefined> => {
+  const data = await prisma.price.findUnique({
+    where: {
+      id: priceId,
+    }
+  });
+  return data?.monthlyCredit;
+}

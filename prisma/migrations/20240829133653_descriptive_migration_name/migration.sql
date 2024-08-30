@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Price" ADD COLUMN     "monthlyCredit" DOUBLE PRECISION NOT NULL DEFAULT 0.00;

@@ -38,7 +38,7 @@ const handleAuthorize = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const { redirect_url, authorize_form } =
     await oauthController.authorize(requestParams);
-
+  console.error('redirect_url', redirect_url);
   if (redirect_url) {
     res.redirect(302, redirect_url);
   } else {

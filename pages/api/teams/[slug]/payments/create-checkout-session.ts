@@ -30,6 +30,8 @@ export default async function handler(
 }
 
 const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
+  // if no quantity is provided, default to 1
+
   const { price, quantity } = validateWithSchema(
     checkoutSessionSchema,
     req.body

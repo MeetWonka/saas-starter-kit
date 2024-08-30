@@ -4,7 +4,8 @@ import { createTeam, getTeams, isTeamExists } from 'models/team';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { recordMetric } from '@/lib/metrics';
 import { createTeamSchema, validateWithSchema } from '@/lib/zod';
-import { getCurrentUser } from 'models/user';
+import { getCurrentUser, getFreeTrialConsumed, setFreeTrialConsumed } from 'models/user';
+import { createCredit } from 'models/credit';
 
 export default async function handler(
   req: NextApiRequest,
@@ -60,6 +61,15 @@ const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
     name,
     slug,
   });
+
+  const amount = await getFreeTrialConsumed(user.id) ? 0 : 15;
+
+  const createdCredit = await createCredit({
+    teamId: team.id,
+    amount : amount,
+  });
+
+  await setFreeTrialConsumed(user.id, true);
 
   recordMetric('team.created');
 

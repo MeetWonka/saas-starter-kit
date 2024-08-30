@@ -20,8 +20,15 @@ type EventType =
   | 'webhook.update'
   | 'team.create'
   | 'team.update'
-  | 'team.delete';
-
+  | 'team.delete'
+  | 'number.create'    // Added this
+  | 'number.update'    // Added this
+  | 'number.delete'    // Added this
+  | 'credit.create'    // Add this
+  | 'credit.update'    // Add this
+  | 'credit.delete'    // Add this
+  | 'credit.fetch'     // Add this
+  | 'credits.list';    // Add this
 type Request = {
   action: EventType;
   user: User;

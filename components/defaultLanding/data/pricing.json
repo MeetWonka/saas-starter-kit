@@ -1,32 +1,30 @@
 [
   {
-    "amount": "30k",
-    "currency": "USD",
+    "amount": "10",
+    "currency": "EUR",
     "duration": "month",
-    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+    "description": "Start",
     "benefits": [
-      "Up to 20 users.",
-      "Free storage upto 1GB",
-      "Lifetime validity"
+      "Up to 1 number",
+      "20 voice mails/minutes per month"
     ]
   },
   {
-    "amount": "120k",
-    "currency": "USD",
+    "amount": "30",
+    "currency": "EUR",
     "duration": "month",
-    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-    "benefits": ["Up to 500 users.", "Storage upto 50GB", "24*7 support"]
+    "description": "Scale",
+    "benefits": ["Up to 2 numbers", "150 voice mails/minutes per month", "24*7 support"]
   },
   {
-    "amount": "350k",
-    "currency": "USD",
+    "amount": "100",
+    "currency": "EUR",
     "duration": "month",
-    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+    "description": "Rocket",
     "benefits": [
-      "Up to 1000 users.",
-      "Storage upto 100GB",
-      "24*7 support",
-      "Data backups"
+      "Up to 5 phones number registered",
+      "1000 voice mails/minutes per month",
+      "24*7 support"
     ]
   }
 ]

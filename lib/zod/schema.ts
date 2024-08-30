@@ -25,6 +25,9 @@ import {
   name,
   image,
   eventTypes,
+  phoneNumber,
+  displayName,
+  emails
 } from './primitives';
 
 export const createApiKeySchema = z.object({
@@ -171,3 +174,35 @@ export const ssoVerifySchema = z
   .refine((data) => data.email || data.slug, {
     message: 'At least one of email or slug is required',
   });
+
+// Schema for creating or updating a number
+export const createOrUpdateNumberSchema = z.object({
+  phoneNumber: phoneNumber,
+  displayName: displayName,
+  language: displayName,
+  emails: emails,
+});
+
+export const createOrUpdateNumberSchemaForm = z.object({
+  phoneNumber: phoneNumber,
+  displayName: displayName,
+  language: displayName,
+  emails: displayName,
+});
+
+// Schema for deleting a number
+export const deleteNumberSchema = z.object({
+  id: z.string().min(1, { message: 'Number ID is required' }),
+});
+
+// Schema for fetching a number by ID
+export const getNumberSchema = z.object({
+  id: z.string().min(1, { message: 'Number ID is required' }),
+});
+
+// You can export all of them together if needed
+export const numberSchemas = {
+  createOrUpdate: createOrUpdateNumberSchema,
+  delete: deleteNumberSchema,
+  get: getNumberSchema,
+};

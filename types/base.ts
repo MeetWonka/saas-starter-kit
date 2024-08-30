@@ -55,7 +55,17 @@ export type AppEvent =
   | 'webhook.created'
   | 'webhook.removed'
   | 'webhook.fetched'
-  | 'webhook.updated';
+  | 'webhook.updated'
+  | 'number.fetched'
+  | 'number.created'    // Add this
+  | 'number.updated'    // Add this
+  | 'number.deleted'
+  | 'numbers.listed'
+  | 'credit.fetched'
+  | 'credit.created'    // Add this
+  | 'credit.updated'    // Add this
+  | 'credit.deleted'    // Add this
+  | 'credits.listed'    // Add this
 
 export type AUTH_PROVIDER =
   | 'github'
@@ -74,3 +84,19 @@ export interface TeamFeature {
   payments: boolean;
   deleteTeam: boolean;
 }
+
+export type Email = {
+  id: string;
+  email: string;
+  numberId: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type NumberWithDetails = {
+  id: string;
+  phoneNumber: string;
+  displayName: string;
+  language?: string;
+  emails: Email[];
+};

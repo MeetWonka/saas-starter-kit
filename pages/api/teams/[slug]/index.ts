@@ -7,6 +7,7 @@ import {
   updateTeam,
 } from 'models/team';
 import { throwIfNotAllowed } from 'models/user';
+import { getCreditForTeam } from 'models/credit';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { recordMetric } from '@/lib/metrics';
 import { ApiError } from '@/lib/errors';
@@ -52,10 +53,16 @@ const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
   throwIfNotAllowed(user, 'team', 'read');
 
   const team = await getTeam({ id: user.team.id });
+  const credit = await getCreditForTeam(user.team.id);
 
   recordMetric('team.fetched');
 
-  res.status(200).json({ data: team });
+  res.status(200).json({ data: {
+    ...team,
+    credit : credit, 
+    }
+  }
+  );
 };
 
 // Update a team

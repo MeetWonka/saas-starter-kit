@@ -4,6 +4,9 @@ type RoleType = (typeof Role)[keyof typeof Role];
 export type Action = 'create' | 'update' | 'read' | 'delete' | 'leave';
 export type Resource =
   | 'team'
+  | 'number'
+  | 'numbers'
+  | 'credit'
   | 'team_member'
   | 'team_invitation'
   | 'team_sso'
@@ -75,6 +78,14 @@ export const permissions: RolePermissions = {
       resource: 'team_api_key',
       actions: '*',
     },
+    {
+      resource: 'number',
+      actions: '*',
+    },
+    {
+      resource: 'credit',
+      actions: ['read'],
+    },
   ],
   ADMIN: [
     {
@@ -109,11 +120,27 @@ export const permissions: RolePermissions = {
       resource: 'team_api_key',
       actions: '*',
     },
+    {
+      resource: 'number',
+      actions: '*',
+    },
+    {
+      resource: 'credit',
+      actions: ['read'],
+    },
   ],
   MEMBER: [
     {
       resource: 'team',
       actions: ['read', 'leave'],
+    },
+    {
+      resource: 'number',
+      actions: '*',
+    },
+    {
+      resource: 'credit',
+      actions: ['read'],
     },
   ],
 };

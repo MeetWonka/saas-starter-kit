@@ -19,7 +19,8 @@ export const createUser = async (data: {
   name: string;
   email: string;
   password?: string;
-  emailVerified?: Date | null;
+  emailVerified?: Date | null
+  freeTrialConsumed?: boolean | false;
 }) => {
   return await prisma.user.create({
     data: normalizeUser(data),
@@ -128,4 +129,26 @@ export const getCurrentUser = async (
   }
 
   return session.user;
+};
+
+
+export const getFreeTrialConsumed = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { freeTrialConsumed: true },
+  });
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  return user.freeTrialConsumed;
+};
+
+// Set the freeTrialConsumed status of a user
+export const setFreeTrialConsumed = async (userId: string, consumed: boolean) => {
+  return await prisma.user.update({
+    where: { id: userId },
+    data: { freeTrialConsumed: consumed },
+  });
 };
